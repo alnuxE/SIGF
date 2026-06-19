@@ -56,7 +56,15 @@ export default function LivePage() {
       for (const z of r.zonas) map.set(z.id_zona, { numero: z.numero, nombre: z.nombre })
     return [...map.entries()]
       .map(([id_zona, z]) => ({ id_zona, numero: z.numero, nombre: z.nombre }))
-      .sort((a, b) => zonaLabel(a.nombre, a.numero).localeCompare(zonaLabel(b.nombre, b.numero)))
+      // Ordenadas por su número de importancia (ascendente). Las que no tengan
+      // número quedan al final, y entre iguales se desempata por etiqueta.
+      .sort((a, b) => {
+        if (a.numero == null && b.numero == null)
+          return zonaLabel(a.nombre, a.numero).localeCompare(zonaLabel(b.nombre, b.numero))
+        if (a.numero == null) return 1
+        if (b.numero == null) return -1
+        return a.numero - b.numero
+      })
   }, [rutas])
 
   const rutasActivas = useMemo(() => new Set(live.map((b) => b.id_ruta)).size, [live])
@@ -388,7 +396,11 @@ function VistaRuta({
                       <div className="bus-card__top">
                         <span className="bus-card__placas">{b.num_placas ?? 'Sin placa'}</span>
                         <span className={`bus-card__eta${prox ? '' : ' bus-card__eta--done'}`}>
-                          {prox ? `🕒 ${etaTexto(b.min_por_zona)}` : '🏁 Última parada'}
+                          {b.estacionado
+                            ? '🅿️ Estacionado'
+                            : prox
+                              ? `🕒 ${etaTexto(b.min_por_zona)}`
+                              : '🏁 Última parada'}
                         </span>
                       </div>
                       <div className="bus-card__meta">{b.conductor ?? 'Conductor'}</div>
@@ -409,7 +421,7 @@ function VistaRuta({
                         ) : (
                           <span className="next-stop__to next-stop__to--end">
                             <small>Fin de ruta</small>
-                            Terminando
+                            {b.estacionado ? 'Llegó · estacionado' : 'Terminando'}
                           </span>
                         )}
                       </div>

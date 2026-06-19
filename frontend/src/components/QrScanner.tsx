@@ -20,7 +20,12 @@ export default function QrScanner({ onResult, active }: QrScannerProps) {
     const scanner = new Html5Qrcode('qr-reader')
     let cancelled = false
 
-    scanner
+    // Promesa de arranque de la cámara. Encadenamos el stop a ESTA promesa
+    // (no la detenemos de forma síncrona) para no intentar pararla antes de
+    // que termine de iniciarse. Sin esto, el doble montaje de React StrictMode
+    // en desarrollo dejaba la primera cámara viva y abría una segunda → la
+    // cámara aparecía dos veces.
+    const startPromise = scanner
       .start(
         { facingMode: 'environment' },
         { fps: 10, qrbox: 240 },
@@ -36,18 +41,17 @@ export default function QrScanner({ onResult, active }: QrScannerProps) {
           }
           console.error('Error al iniciar la cámara:', err)
         }
+        // Re-lanzamos para que el cleanup NO intente stop() sobre una cámara
+        // que nunca llegó a arrancar.
+        throw err
       })
 
     return () => {
       cancelled = true
-      try {
-        scanner
-          .stop()
-          .then(() => scanner.clear())
-          .catch(() => {})
-      } catch (err) {
-        try { scanner.clear() } catch (e) {}
-      }
+      startPromise
+        .then(() => scanner.stop())
+        .then(() => scanner.clear())
+        .catch(() => {})
     }
   }, [active])
 

@@ -7,6 +7,10 @@ export const publicRouter = Router()
 // Minutos por zona por defecto cuando aún no hay historial suficiente.
 const MIN_POR_ZONA_DEFAULT = 5
 
+// Cuánto tiempo sigue mostrándose un camión que YA llegó al final de su ruta,
+// como "estacionado en la última parada", antes de quitarlo de la vista en vivo.
+const MIN_ESTACIONADO = 120 // minutos
+
 // Calcula el tiempo típico (minutos) que tarda un camión en pasar de una zona
 // a la siguiente, por ruta, a partir del historial de check-ins. Devuelve un
 // mapa { id_ruta: minutos }. Ignora saltos no positivos o absurdos (> 3 h).
@@ -82,7 +86,8 @@ publicRouter.get('/live', async (_req, res) => {
         pos.zona_numero::int AS zona_numero,
         pos.zona_nombre      AS zona_nombre,
         pos.id_zona::int     AS id_zona,
-        pos.hora
+        pos.hora,
+        (v.estado = 'finalizado') AS estacionado
       FROM viaje v
       JOIN ruta r            ON r.id = v.id_ruta
       LEFT JOIN transporte t ON t.id = v.id_transporte
@@ -98,8 +103,10 @@ publicRouter.get('/live', async (_req, res) => {
          LIMIT 1
       ) pos ON true
       WHERE v.estado = 'en_curso'
+         OR (v.estado = 'finalizado'
+             AND v.fin > now() - ($1 || ' minutes')::interval)
       ORDER BY r.numero_ruta, t.num_placas
-    `)
+    `, [MIN_ESTACIONADO])
 
     const data = r.rows.map((row) => {
       const total = Number(row.total_zonas ?? 0)
@@ -122,8 +129,11 @@ publicRouter.get('/live', async (_req, res) => {
         hora: row.hora ?? null,
         porcentaje,
         min_por_zona: Math.round(minPorZona),
+        // true = ya llegó al final y está estacionado en la última parada
+        estacionado: row.estacionado === true,
         // minutos estimados para terminar la ruta desde su posición actual
-        eta_fin_min: Math.round(faltan * minPorZona),
+        // (0 si ya está estacionado en el destino)
+        eta_fin_min: row.estacionado === true ? 0 : Math.round(faltan * minPorZona),
       }
     })
     res.json(data)
@@ -155,6 +165,8 @@ publicRouter.get('/parada/:id_zona', async (req, res) => {
           JOIN check_in ci  ON ci.id_viaje = v.id AND ci.is_check = true
           JOIN zona_ruta zr ON zr.id = ci.id_zona_ruta
          WHERE v.estado = 'en_curso'
+            OR (v.estado = 'finalizado'
+                AND v.fin > now() - ($2 || ' minutes')::interval)
          GROUP BY v.id, v.id_ruta, v.id_transporte, v.id_conductor
       ),
       destino AS (
@@ -181,7 +193,7 @@ publicRouter.get('/parada/:id_zona', async (req, res) => {
       LEFT JOIN usuario u    ON u.id = c.id_usuario
       ORDER BY faltan ASC, p.numero_ruta
     `,
-      [req.params.id_zona],
+      [req.params.id_zona, MIN_ESTACIONADO],
     )
 
     const data = r.rows.map((row) => {

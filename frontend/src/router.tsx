@@ -7,6 +7,7 @@ import ProgressPage from './pages/admin/ProgressPage'
 import TransportistaPage from './pages/TransportistaPage'
 import ChecadorPage from './pages/ChecadorPage'
 import LivePage from './pages/LivePage'
+import QrPage from './pages/QrPage'
 import UsuariosPage from './pages/admin/UsuariosPage'
 import TransportesPage from './pages/admin/TransportesPage'
 import RoleRoute from './components/RoleRoute'
@@ -22,6 +23,7 @@ export const router = createBrowserRouter([
   { path: '/', element: <Landing /> },
   { path: '/login', element: <LoginPage /> },
   { path: '/vivo', element: <LivePage /> },
+  { path: '/qr', element: <QrPage /> },
   {
     path: '/admin',
     element: (

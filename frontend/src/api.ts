@@ -153,6 +153,7 @@ export interface LiveViaje {
   porcentaje: number
   min_por_zona: number
   eta_fin_min: number
+  estacionado: boolean // ya llegó al final y está parado en la última parada
 }
 
 export interface ParadaCamion {
