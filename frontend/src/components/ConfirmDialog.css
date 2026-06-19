@@ -1,0 +1,146 @@
+.cfm-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgba(15, 23, 42, 0.5);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  animation: cfm-overlay-in 0.22s ease both;
+}
+
+.cfm-overlay--leaving {
+  animation: cfm-overlay-out 0.2s ease both;
+}
+
+@keyframes cfm-overlay-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes cfm-overlay-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+.cfm {
+  width: 100%;
+  max-width: 400px;
+  padding: 28px 26px 22px;
+  text-align: center;
+  background: #fff;
+  border: 1px solid var(--slate-200);
+  border-radius: 20px;
+  box-shadow: 0 24px 60px -14px rgba(15, 23, 42, 0.4);
+  animation: cfm-in 0.34s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.cfm--leaving {
+  animation: cfm-out 0.2s cubic-bezier(0.4, 0, 1, 1) both;
+}
+
+@keyframes cfm-in {
+  from {
+    opacity: 0;
+    transform: translateY(18px) scale(0.92);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes cfm-out {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.94);
+  }
+}
+
+/* ---------- Icono ---------- */
+.cfm__icon {
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  margin: 0 auto 16px;
+  border-radius: 16px;
+  color: var(--brand-600);
+  background: var(--brand-50);
+  animation: cfm-icon-pop 0.45s cubic-bezier(0.16, 1, 0.3, 1) 0.08s both;
+}
+
+.cfm__icon--danger {
+  color: var(--danger);
+  background: #fef2f2;
+}
+
+@keyframes cfm-icon-pop {
+  from {
+    transform: scale(0.3);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1.1);
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* ---------- Texto ---------- */
+.cfm__title {
+  margin: 0 0 6px;
+  font-size: 19px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--slate-900);
+}
+
+.cfm__msg {
+  margin: 0 0 22px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--slate-500);
+}
+
+/* ---------- Acciones ---------- */
+.cfm__actions {
+  display: flex;
+  gap: 10px;
+}
+
+.cfm__actions .btn {
+  flex: 1;
+}
+
+/* Variante de botón de peligro sólido para la confirmación destructiva */
+.btn--danger-solid {
+  color: #fff;
+  background: var(--danger);
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.08),
+    0 8px 18px -8px rgba(220, 38, 38, 0.55);
+}
+
+.btn--danger-solid:hover:not(:disabled) {
+  background: #b91c1c;
+  box-shadow: 0 2px 4px rgba(15, 23, 42, 0.1),
+    0 12px 22px -8px rgba(220, 38, 38, 0.6);
+  transform: translateY(-1px);
+}

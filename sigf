@@ -1,0 +1,56 @@
+#!/usr/bin/env bash
+# Atajos para manejar el proyecto SIGF.
+# Uso:  ./sigf <comando>
+set -e
+
+# Ubicarse siempre en la carpeta del proyecto (donde está este script)
+cd "$(dirname "$0")"
+
+cmd="${1:-help}"
+
+case "$cmd" in
+  start)
+    # Arranca los servicios en segundo plano (-d). Reconstruye si hace falta.
+    docker compose up --build -d
+    echo ""
+    echo "SIGF arriba:"
+    echo "  Frontend  -> http://localhost:5173"
+    echo "  Backend   -> http://localhost:4000/api/health"
+    echo "  Postgres  -> localhost:5432"
+    ;;
+
+  stop)
+    # Apaga los contenedores (conserva los datos de la base).
+    docker compose down
+    ;;
+
+  log|logs)
+    # Muestra los logs en vivo. Opcional: ./sigf log backend
+    docker compose logs -f "${@:2}"
+    ;;
+
+  restart)
+    docker compose restart "${@:2}"
+    ;;
+
+  status)
+    docker compose ps
+    ;;
+
+  reset-db)
+    # CUIDADO: borra la base de datos y la recrea desde db/init.sql
+    docker compose down -v
+    docker compose up --build -d
+    ;;
+
+  *)
+    echo "Uso: ./sigf <comando>"
+    echo ""
+    echo "  start       Levanta SIGF (frontend + backend + postgres)"
+    echo "  stop        Detiene SIGF (conserva los datos)"
+    echo "  log [svc]   Muestra logs en vivo (ej: ./sigf log backend)"
+    echo "  restart     Reinicia los servicios"
+    echo "  status      Estado de los contenedores"
+    echo "  reset-db    Borra y recrea la base de datos desde cero"
+    ;;
+esac

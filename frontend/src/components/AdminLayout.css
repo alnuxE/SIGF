@@ -1,0 +1,319 @@
+.adm {
+  display: grid;
+  grid-template-columns: 248px 1fr;
+  min-height: 100%;
+  background: var(--slate-100);
+}
+
+/* ---------- Sidebar ---------- */
+.adm__side {
+  display: flex;
+  flex-direction: column;
+  background: #0f172a;
+  color: #e2e8f0;
+  padding: 22px 16px;
+}
+
+.adm__brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 4px 8px 22px;
+}
+
+.adm__brand-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.adm__toggle {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  flex: 0 0 auto;
+  color: var(--slate-300);
+  background: rgba(255, 255, 255, 0.06);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.adm__toggle:hover {
+  background: rgba(255, 255, 255, 0.14);
+  color: #fff;
+}
+
+.adm__toggle svg {
+  transition: transform 0.2s var(--ease-out);
+}
+
+.adm--collapsed .adm__toggle svg {
+  transform: rotate(180deg);
+}
+
+.adm__logo {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  color: #fff;
+  background: linear-gradient(135deg, var(--brand-600), var(--brand-700));
+}
+
+.adm__brand strong {
+  display: block;
+  font-size: 16px;
+  letter-spacing: 0.02em;
+}
+
+.adm__brand small {
+  font-size: 11px;
+  color: var(--slate-400);
+}
+
+.adm__nav {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+}
+
+.adm__link {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 12px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--slate-300);
+  text-decoration: none;
+  transition: background 0.2s var(--ease-out), color 0.2s var(--ease-out),
+    transform 0.2s var(--ease-out);
+}
+
+.adm__link:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: #fff;
+  transform: translateX(2px);
+}
+
+.adm__link--active {
+  background: var(--brand-600);
+  color: #fff;
+  box-shadow: 0 8px 18px -8px rgba(37, 99, 235, 0.7);
+}
+
+/* Indicador lateral animado del enlace activo */
+.adm__link--active::before {
+  content: '';
+  position: absolute;
+  left: -16px;
+  top: 50%;
+  width: 4px;
+  height: 20px;
+  border-radius: 0 4px 4px 0;
+  background: #fff;
+  transform: translateY(-50%);
+  animation: rise-in 0.3s var(--ease-out) both;
+}
+
+.adm__user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 8px 4px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.adm__user-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.adm__user-name {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: #fff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.adm__user-role {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #93c5fd;
+}
+
+.adm__logout {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  flex: 0 0 auto;
+  color: var(--slate-300);
+  background: rgba(255, 255, 255, 0.06);
+  border: none;
+  border-radius: 9px;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.adm__logout:hover {
+  background: rgba(239, 68, 68, 0.18);
+  color: #fca5a5;
+}
+
+/* ---------- Sidebar colapsado (solo iconos) ---------- */
+.adm--collapsed {
+  grid-template-columns: 76px 1fr;
+}
+
+.adm--collapsed .adm__brand {
+  flex-direction: column;
+  justify-content: center;
+  gap: 12px;
+}
+
+.adm--collapsed .adm__brand-text {
+  display: none;
+}
+
+.adm--collapsed .adm__toggle {
+  width: 100%;
+  height: 34px;
+}
+
+.adm--collapsed .adm__side {
+  align-items: center;
+}
+
+.adm--collapsed .adm__nav {
+  align-self: stretch;
+}
+
+.adm--collapsed .adm__link {
+  justify-content: center;
+  gap: 0;
+  font-size: 0; /* oculta la etiqueta, deja el icono */
+}
+
+.adm--collapsed .adm__link svg {
+  font-size: 14px; /* restaura tamaño para el icono */
+}
+
+.adm--collapsed .adm__user {
+  flex-direction: column;
+  gap: 8px;
+}
+
+.adm--collapsed .adm__user-info {
+  display: none;
+}
+
+/* ---------- Área principal ---------- */
+.adm__main {
+  padding: 32px 36px;
+  overflow-y: auto;
+}
+
+/* ===========================================================================
+   Responsive
+   =========================================================================== */
+
+/* Tablet / pantallas medianas: sidebar más estrecho */
+@media (max-width: 1024px) {
+  .adm {
+    grid-template-columns: 210px 1fr;
+  }
+  .adm__main {
+    padding: 26px 24px;
+  }
+}
+
+/* Móvil: la barra lateral pasa a ser una barra inferior tipo app */
+@media (max-width: 720px) {
+  .adm {
+    display: block;
+    min-height: 100%;
+  }
+
+  .adm__main {
+    padding: 18px 14px calc(72px + env(safe-area-inset-bottom, 0px));
+  }
+
+  .adm__side {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 50;
+    flex-direction: row;
+    align-items: stretch;
+    gap: 4px;
+    height: calc(64px + env(safe-area-inset-bottom, 0px));
+    padding: 6px 8px calc(6px + env(safe-area-inset-bottom, 0px));
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 -8px 24px -12px rgba(15, 23, 42, 0.5);
+  }
+
+  /* Marca y datos de usuario no caben en la barra inferior */
+  .adm__brand,
+  .adm__user-info {
+    display: none;
+  }
+
+  .adm__nav {
+    flex: 1;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: stretch;
+    gap: 2px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .adm__nav::-webkit-scrollbar {
+    display: none;
+  }
+
+  .adm__link {
+    flex: 1 0 auto;
+    flex-direction: column;
+    gap: 3px;
+    min-width: 56px;
+    padding: 7px 6px;
+    font-size: 10px;
+    font-weight: 600;
+    text-align: center;
+    transform: none;
+  }
+  .adm__link:hover {
+    transform: none;
+  }
+  /* El indicador lateral del activo no aplica en horizontal */
+  .adm__link--active::before {
+    display: none;
+  }
+  .adm__link--active {
+    box-shadow: none;
+  }
+
+  .adm__user {
+    border-top: none;
+    padding: 0;
+    margin-left: 2px;
+    align-items: center;
+  }
+  .adm__logout {
+    width: 44px;
+    height: 100%;
+  }
+}

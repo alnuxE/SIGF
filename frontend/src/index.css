@@ -1,0 +1,70 @@
+:root {
+  /* Paleta corporativa — el azul transmite confianza y seguridad */
+  --brand-700: #1d4ed8;
+  --brand-600: #2563eb;
+  --brand-500: #3b82f6;
+  --brand-50: #eff6ff;
+
+  /* Neutros pizarra para el aire minimalista */
+  --slate-900: #0f172a;
+  --slate-700: #334155;
+  --slate-500: #64748b;
+  --slate-400: #94a3b8;
+  --slate-300: #cbd5e1;
+  --slate-200: #e2e8f0;
+  --slate-100: #f1f5f9;
+  --slate-50: #f8fafc;
+
+  --danger: #dc2626;
+  --success: #16a34a;
+
+  --radius: 14px;
+  --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.04);
+  --shadow-lg: 0 20px 45px -15px rgba(15, 23, 42, 0.18);
+
+  /* Sombras suaves y por capas, estilo Apple/Next */
+  --shadow-card: 0 1px 2px rgba(15, 23, 42, 0.04),
+    0 6px 16px -8px rgba(15, 23, 42, 0.08);
+  --shadow-card-hover: 0 2px 4px rgba(15, 23, 42, 0.05),
+    0 18px 36px -14px rgba(15, 23, 42, 0.16);
+
+  /* Curvas de movimiento — spring suave para microinteracciones */
+  --ease-spring: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica,
+    Arial, sans-serif;
+  color: var(--slate-900);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  margin: 0;
+  height: 100%;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Respeta a quienes prefieren menos movimiento */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}

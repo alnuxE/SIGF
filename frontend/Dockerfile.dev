@@ -1,0 +1,14 @@
+FROM node:20-alpine
+
+WORKDIR /app
+
+# Instala dependencias primero (mejor cache)
+COPY package*.json ./
+RUN npm install
+
+# El código real se monta como volumen en docker-compose (hot-reload / HMR)
+COPY . .
+
+EXPOSE 5173
+
+CMD ["npm", "run", "dev"]

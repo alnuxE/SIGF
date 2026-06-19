@@ -1,0 +1,124 @@
+.lp {
+  position: relative;
+}
+
+.lp__map {
+  width: 100%;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid var(--slate-200);
+  z-index: 0;
+}
+
+/* El pin no debe capturar clics: así el clic llega al mapa */
+.lp-pin {
+  background: transparent;
+  border: none;
+  filter: drop-shadow(0 4px 6px rgba(15, 23, 42, 0.3));
+  pointer-events: none;
+  animation: lp-drop 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes lp-drop {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Botón "Mi ubicación" flotante sobre el mapa */
+.lp__locate {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 400;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 34px;
+  padding: 0 12px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--slate-700);
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(6px);
+  border: 1px solid var(--slate-200);
+  border-radius: 9px;
+  cursor: pointer;
+  box-shadow: 0 4px 12px -4px rgba(15, 23, 42, 0.25);
+  transition: background 0.15s, transform 0.12s, color 0.15s;
+}
+
+.lp__locate:hover:not(:disabled) {
+  background: #fff;
+  color: var(--brand-600);
+  transform: translateY(-1px);
+}
+
+.lp__locate:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* Lectura de coordenadas seleccionadas */
+.lp__readout {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+  min-height: 26px;
+}
+
+.lp__coord {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 11px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--slate-800, #1e293b);
+  background: var(--slate-50);
+  border: 1px solid var(--slate-200);
+  border-radius: 8px;
+  font-variant-numeric: tabular-nums;
+  animation: lp-fade 0.25s var(--ease-out, ease);
+}
+
+.lp__coord small {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--slate-400);
+}
+
+@keyframes lp-fade {
+  from {
+    opacity: 0;
+    transform: translateY(3px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.lp__hint {
+  font-size: 13px;
+  color: var(--slate-400);
+}
+
+.lp__error {
+  margin-top: 8px;
+  padding: 8px 11px;
+  font-size: 12.5px;
+  border-radius: 8px;
+  color: var(--danger);
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+}
